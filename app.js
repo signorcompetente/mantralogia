@@ -1251,9 +1251,10 @@ function MantraRiparazione() {
 
   useEffect(() => {
     const caricaDati = async () => {
-      setLoading(true);
-      try {
-        const datiSalvati = await window.storage.get('mantra-asta-dati');
+  setLoading(true);
+  try {
+    const saved = localStorage.getItem('mantra-asta-dati');
+    const datiSalvati = saved ? { value: saved } : null;
         if (datiSalvati && datiSalvati.value) {
           const dati = JSON.parse(datiSalvati.value);
           setBudgetIniziale(dati.budgetIniziale || 50);
@@ -1277,20 +1278,20 @@ function MantraRiparazione() {
 
   useEffect(() => {
     if (loading) return;
-    const salvaDati = async () => {
-      try {
-        const dati = {
-          budgetIniziale,
-          modalitaSvincolo,
-          rosaAttuale,
-          giocatoriSelezionati,
-          fuoriSerieA,
-          creditiOverride,
-          acquisti,
-          listaSvincolati,
-          wishlist
-        };
-        await window.storage.set('mantra-asta-dati', JSON.stringify(dati));
+   const salvaDati = async () => {
+  try {
+    const dati = {
+      budgetIniziale,
+      modalitaSvincolo,
+      rosaAttuale,
+      giocatoriSelezionati,
+      fuoriSerieA,
+      creditiOverride,
+      acquisti,
+      listaSvincolati,
+      wishlist
+    };
+    localStorage.setItem('mantra-asta-dati', JSON.stringify(dati));
         setUltimoSalvataggio(new Date());
       } catch (error) {
         console.error('Errore salvataggio:', error);
