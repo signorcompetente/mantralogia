@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function FantacalcioSwitch() {
@@ -24,7 +24,6 @@ export default function FantacalcioSwitch() {
     </div>
   );
 }
-import React, { useState, useEffect } from 'react';
 
 function FantacalcioBuilder() {
   const [titolari, setTitolari] = useState([]);
@@ -1227,7 +1226,7 @@ function FantacalcioBuilder() {
     </div>
   );
 }
-import React, { useState, useEffect } from 'react';
+
 import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 function MantraRiparazione() {
