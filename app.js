@@ -1,5 +1,4 @@
 const { useState, useEffect } = React;
-const { Trash2, ChevronDown, ChevronUp } = lucide;
 function FantacalcioSwitch() {
   const [vistaCorrente, setVistaCorrente] = useState('builder');
 
