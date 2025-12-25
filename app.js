@@ -1226,8 +1226,6 @@ function FantacalcioBuilder() {
     </div>
   );
 }
-
-
 function MantraRiparazione() {
   const [budgetIniziale, setBudgetIniziale] = useState(50);
   const [modalitaSvincolo, setModalitaSvincolo] = useState("1credito");
