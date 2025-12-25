@@ -1227,7 +1227,6 @@ function FantacalcioBuilder() {
   );
 }
 
-import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 function MantraRiparazione() {
   const [budgetIniziale, setBudgetIniziale] = useState(50);
