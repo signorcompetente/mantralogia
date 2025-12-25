@@ -573,6 +573,11 @@ function FantacalcioBuilder() {
                   if (confirm("Reset rosa?")) {
                     setTitolari([]);
                     setPanchina([]);
+                    setWishlist([]);
+                    setDatabase({});
+                    setPrezziReali({});
+                    setBudgetTotale(500);
+                    setBudgetTrackerOpen(false);
                   }
                 }}
                 className="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 hover:scale-105 shadow-lg hover:shadow-red-500/50 text-sm transition-all duration-200"
