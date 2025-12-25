@@ -1591,7 +1591,7 @@ function MantraRiparazione() {
           <button onClick={() => setSvincolareDaRosaAperta(!svincolareDaRosaAperta)}
             className="w-full bg-orange-500 hover:bg-orange-600 text-white p-3 font-bold text-lg flex items-center justify-between">
             <span>✂️ GIOCATORI DA SVINCOLARE ({giocatoriSelezionati.length})</span>
-            {svincolareDaRosaAperta ? <ChevronUp /> : <ChevronDown />}
+            <span>{svincolareDaRosaAperta ? '▲' : '▼'}</span>
           </button>
           
           {svincolareDaRosaAperta && (
