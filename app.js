@@ -5,7 +5,7 @@ function FantacalcioSwitch() {
   return (
     <div className="min-h-screen relative">
       {/* BOTTONE SWITCH FISSO */}
-      <div className="relative top-0 left-0 flex justify-center mb-4 z-50">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <button
           onClick={() => setVistaCorrente(vistaCorrente === 'builder' ? 'asta' : 'builder')}
           className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-black text-base shadow-2xl hover:scale-105 transition-all duration-200 flex items-center gap-2"
