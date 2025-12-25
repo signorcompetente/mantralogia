@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-
-export default function FantacalcioSwitch() {
+const { useState, useEffect } = React;
+const { Trash2, ChevronDown, ChevronUp } = lucide;
+export FantacalcioSwitch() {
   const [vistaCorrente, setVistaCorrente] = useState('builder');
 
   return (
@@ -1839,3 +1838,5 @@ function MantraRiparazione() {
     </div>
   );
 }
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FantacalcioSwitch />);
