@@ -1,6 +1,6 @@
 const { useState, useEffect } = React;
 const { Trash2, ChevronDown, ChevronUp } = lucide;
-export FantacalcioSwitch() {
+function FantacalcioSwitch() {
   const [vistaCorrente, setVistaCorrente] = useState('builder');
 
   return (
