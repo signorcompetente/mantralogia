@@ -1445,7 +1445,7 @@ function MantraRiparazione() {
                 </p>
               )}
             </div>
-            <div className="flex flex-row justify-between items-center gap-4">
+            <div className="flex flex-row flex-nowrap gap-2 items-center overflow-x-auto">
               <button onClick={() => setShowImportRosaModal(true)} className="px-4 py-2 bg-white text-orange-600 rounded-lg font-bold text-sm hover:bg-orange-50 transition">
                 📥 ROSA
               </button>
