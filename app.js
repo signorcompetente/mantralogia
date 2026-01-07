@@ -1478,8 +1478,8 @@ function MantraRiparazione() {
         </div>
 
         <div className="bg-white rounded-xl shadow-lg border-2 border-slate-200 p-6">
-          <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex flex-nowrap items-center justify-center gap-6">
               <div className="flex items-center gap-3">
                 <label className="text-sm font-bold text-slate-700 whitespace-nowrap">💰 Budget iniziale:</label>
                 <input type="number" min="0" className="w-24 border-2 border-green-400 p-2 rounded-lg font-bold text-xl text-center"
