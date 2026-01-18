@@ -1793,6 +1793,8 @@ function MantraRiparazione() {
           )}
         </div>
 
+       </div>
+
       </div>
 
       {showImportRosaModal && (
@@ -1845,5 +1847,3 @@ function MantraRiparazione() {
     </div>
   );
 }
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<FantacalcioSwitch />);
