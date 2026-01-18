@@ -1231,7 +1231,6 @@ function FantacalcioBuilder() {
 }
 function MantraRiparazione() {
   const [budgetIniziale, setBudgetIniziale] = useState(50);
-  const [creditiAggiunti, setCreditiAggiunti] = useState(0);
   const [modalitaSvincolo, setModalitaSvincolo] = useState("1credito");
   const [rosaAttuale, setRosaAttuale] = useState([]);
   const [giocatoriSelezionati, setGiocatoriSelezionati] = useState([]);
@@ -1263,7 +1262,6 @@ function MantraRiparazione() {
         if (datiSalvati && datiSalvati.value) {
           const dati = JSON.parse(datiSalvati.value);
           setBudgetIniziale(dati.budgetIniziale || 50);
-          setCreditiAggiunti(dati.creditiAggiunti || 0);
           setModalitaSvincolo(dati.modalitaSvincolo || "1credito");
           setRosaAttuale(dati.rosaAttuale || []);
           setGiocatoriSelezionati(dati.giocatoriSelezionati || []);
@@ -1288,7 +1286,6 @@ function MantraRiparazione() {
   try {
     const dati = {
       budgetIniziale,
-      creditiAggiunti,
       modalitaSvincolo,
       rosaAttuale,
       giocatoriSelezionati,
@@ -1330,7 +1327,7 @@ function MantraRiparazione() {
   };
 
   const creditiRecuperati = giocatoriSelezionati.reduce((sum, i) => sum + calcolaCreditiRecuperati(i), 0);
-  const budgetTotale = budgetIniziale + creditiAggiunti + creditiRecuperati;
+  const budgetTotale = budgetIniziale + creditiRecuperati;
   const spesaTotale = acquisti.reduce((sum, a) => sum + (a.prezzo || 0), 0);
   const budgetRimanente = budgetTotale - spesaTotale;
 
@@ -1482,11 +1479,12 @@ function MantraRiparazione() {
 
         <div className="bg-white rounded-xl shadow-lg border-2 border-slate-200 p-6">
           <div className="flex items-center justify-center gap-6">
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-bold text-slate-700 whitespace-nowrap">➕ Crediti aggiunti:</label>
-              <input type="number" min="0" className="w-24 border-2 border-blue-400 p-2 rounded-lg font-bold text-xl text-center"
-                value={creditiAggiunti} onChange={(e) => setCreditiAggiunti(parseInt(e.target.value) || 0)} />
-        </div>
+            <div className="flex flex-nowrap items-center justify-center gap-6">
+              <div className="flex items-center gap-3">
+                <label className="text-sm font-bold text-slate-700 whitespace-nowrap">💰 Budget iniziale:</label>
+                <input type="number" min="0" className="w-24 border-2 border-green-400 p-2 rounded-lg font-bold text-xl text-center"
+                  value={budgetIniziale} onChange={(e) => setBudgetIniziale(parseInt(e.target.value) || 0)} />
+              </div>
               
               <div className="h-8 w-px bg-slate-300 hidden md:block"></div>
               
@@ -1505,7 +1503,7 @@ function MantraRiparazione() {
               <div className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-6 py-3 rounded-lg shadow-lg">
                 <span className="text-sm font-bold">💵 Totale:</span>
                 <span className="text-3xl font-black">{budgetTotale}</span>
-                <span className="text-xs opacity-90">({budgetIniziale}+{creditiAggiunti}+{creditiRecuperati})</span>
+                <span className="text-xs opacity-90">({budgetIniziale}+{creditiRecuperati})</span>
               </div>
               
               <div className={`flex items-center gap-2 text-white px-6 py-3 rounded-lg shadow-lg ${budgetRimanente >= 0 ? 'bg-gradient-to-r from-blue-500 to-indigo-600' : 'bg-gradient-to-r from-red-500 to-red-700'}`}>
@@ -1782,7 +1780,7 @@ function MantraRiparazione() {
                   <button onClick={() => setAcquisti(acquisti.filter((_, i) => i !== idx))} 
                     className="absolute top-2 right-2 w-6 h-6 bg-white bg-opacity-20 hover:bg-opacity-40 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     ✕
-        </button>
+                  </button>
                   <div className="flex items-center gap-1 mb-1">
                     <span className="text-xs font-bold opacity-90">{acq.ruolo}</span>
                   </div>
@@ -1792,8 +1790,6 @@ function MantraRiparazione() {
             </div>
           )}
         </div>
-
-       </div>
 
       </div>
 
@@ -1847,3 +1843,5 @@ function MantraRiparazione() {
     </div>
   );
 }
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FantacalcioSwitch />);
