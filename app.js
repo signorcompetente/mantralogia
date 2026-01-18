@@ -1782,7 +1782,7 @@ function MantraRiparazione() {
                   <button onClick={() => setAcquisti(acquisti.filter((_, i) => i !== idx))} 
                     className="absolute top-2 right-2 w-6 h-6 bg-white bg-opacity-20 hover:bg-opacity-40 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     ✕
-                  </button>
+        </button>
                   <div className="flex items-center gap-1 mb-1">
                     <span className="text-xs font-bold opacity-90">{acq.ruolo}</span>
                   </div>
@@ -1794,7 +1794,9 @@ function MantraRiparazione() {
         </div>
 
       </div>
+    </div>
 
+    {showImportRosaModal && (
       {showImportRosaModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full p-6">
