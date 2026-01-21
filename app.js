@@ -1230,8 +1230,8 @@ function FantacalcioBuilder() {
   );
 }
 function MantraRiparazione() {
-  const [resto, setResto] = useState(35);
-  const [aggiunta, setAggiunta] = useState(15);
+  const [resto, setResto] = useState(0);
+  const [aggiunta, setAggiunta] = useState(0);
   const [modalitaSvincolo, setModalitaSvincolo] = useState("1credito");
   const [rosaAttuale, setRosaAttuale] = useState([]);
   const [giocatoriSelezionati, setGiocatoriSelezionati] = useState([]);
@@ -1262,8 +1262,8 @@ function MantraRiparazione() {
     const datiSalvati = saved ? { value: saved } : null;
         if (datiSalvati && datiSalvati.value) {
           const dati = JSON.parse(datiSalvati.value);
-          setResto(dati.resto || 35);
-          setAggiunta(dati.aggiunta || 15);
+          setResto(dati.resto || 0);
+          setAggiunta(dati.aggiunta || 0);
           setModalitaSvincolo(dati.modalitaSvincolo || "1credito");
           setRosaAttuale(dati.rosaAttuale || []);
           setGiocatoriSelezionati(dati.giocatoriSelezionati || []);
@@ -1461,8 +1461,8 @@ function MantraRiparazione() {
               <button 
                 onClick={() => {
                   if (confirm('⚠️ Vuoi davvero resettare tutti i dati? Questa azione non può essere annullata.')) {
-                    setResto(35);
-                    setAggiunta(15);
+                    setResto(0);
+                    setAggiunta(0);
                     setModalitaSvincolo("1credito");
                     setRosaAttuale([]);
                     setGiocatoriSelezionati([]);
