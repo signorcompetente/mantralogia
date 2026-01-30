@@ -588,12 +588,6 @@ function FantacalcioBuilder() {
           </div>
         </div>
 
-        {/* SUGGERIMENTO */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-xl p-5 relative overflow-hidden">
-          <div className="absolute inset-0 bg-white opacity-10 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.2),transparent)]"></div>
-          <p className="font-bold text-lg relative z-10">{getSuggerimento()}</p>
-        </div>
-
         {/* BUDGET TRACKER - COLLAPSABILE CON ANALISI */}
         {budgetTrackerOpen && (() => {
           const stats = calcolaBudgetStats();
