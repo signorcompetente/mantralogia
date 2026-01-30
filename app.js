@@ -8,15 +8,15 @@ function FantacalcioSwitch() {
     <div className="fixed top-4 right-4 z-50">
   <button
     onClick={() => setVistaCorrente(vistaCorrente === 'builder' ? 'asta' : 'builder')}
-    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-sm shadow-lg hover:scale-110 transition-all duration-200 flex items-center gap-2"
+    className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold text-3xl shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-200 flex items-center justify-center"
+    title={vistaCorrente === 'builder' ? 'Vai ad Asta Riparazione' : 'Vai a Mantra Builder'}
   >
-    <span className="text-xl">🔄</span>
-    <span className="hidden md:inline">{vistaCorrente === 'builder' ? 'ASTA' : 'BUILDER'}</span>
+    🔄
   </button>
 </div>
 
       {/* CONTENUTO */}
-      <div className="pt-20">
+      <div className="pt-4">
         {vistaCorrente === 'builder' ? <FantacalcioBuilder /> : <MantraRiparazione />}
       </div>
     </div>
