@@ -637,7 +637,28 @@ const calcolaPrioritaEmergenti = () => {
             </div>
           </div>
         </div>
+{/* PANNELLO PRIORITÀ EMERGENTI */}
+{titolari.length >= 3 && priorita.length > 0 && (
+  <div className="bg-white rounded-2xl shadow-xl p-5 border-2 border-indigo-200">
+    <h2 className="text-lg font-black text-slate-800 mb-3">🎯 Priorità Emergenti — Cerca questi ruoli</h2>
+    <div className="flex flex-wrap gap-2">
+      {priorita.map((p, i) => (
+        <div key={i} className={`border-2 rounded-xl px-4 py-2 text-sm font-bold ${p.colore}`}>
+          <span>{p.urgenza}</span>
+          <span className="ml-2 text-base">→ {p.ruolo}</span>
+          {p.satTit > 0 && <span className="ml-2 opacity-60 font-normal text-xs">(hai già {p.satTit})</span>}
+        </div>
+      ))}
+    </div>
+    <p className="text-xs text-slate-400 mt-2">Si aggiorna ad ogni giocatore aggiunto · ruolo primario 80% · emergenza 20%</p>
+  </div>
+)}
 
+{titolari.length < 3 && (
+  <div className="bg-slate-100 rounded-xl p-4 text-center text-slate-500 text-sm border border-slate-200">
+    🎯 Le priorità emergenti appariranno dopo aver aggiunto almeno 3 titolari
+  </div>
+)}
         {/* BUDGET TRACKER - COLLAPSABILE CON ANALISI */}
         {budgetTrackerOpen && (() => {
           const stats = calcolaBudgetStats();
