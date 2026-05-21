@@ -274,7 +274,55 @@ function FantacalcioBuilder() {
 
   const risultati = calcolaRisultati();
   const top3 = risultati.slice(0, 3);
+const calcolaPrioritaEmergenti = () => {
+    if (titolari.length < 3) return [];
 
+    const saturazioneTitolari = {};
+    const saturazionePanchina = {};
+    titolari.forEach(g => {
+      const { primario } = normalizzaRuolo(g.ruolo);
+      primario.forEach(r => { saturazioneTitolari[r] = (saturazioneTitolari[r] || 0) + 1; });
+    });
+    panchina.forEach(g => {
+      const { primario } = normalizzaRuolo(g.ruolo);
+      primario.forEach(r => { saturazionePanchina[r] = (saturazionePanchina[r] || 0) + 1; });
+    });
+
+    const gapScore = {};
+    top3.forEach((mod, idx) => {
+      const pesoModulo = idx === 0 ? 3 : idx === 1 ? 2 : 1;
+      mod.mancantiTitolari.forEach(mancante => {
+        mancante.split('/').forEach(r => {
+          const satTit = saturazioneTitolari[r] || 0;
+          const pesoRuolo = vincolanti[r] || 1;
+          const fattoreSaturazione = Math.max(0, 1 - satTit * 0.5);
+          gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattoreSaturazione * 0.8;
+        });
+      });
+      mod.mancantiPanchina.forEach(mancante => {
+        mancante.split('/').forEach(r => {
+          const satPan = saturazionePanchina[r] || 0;
+          const pesoRuolo = vincolanti[r] || 1;
+          const fattoreSaturazione = Math.max(0, 1 - satPan * 0.5);
+          gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattoreSaturazione * 0.2;
+        });
+      });
+    });
+
+    return Object.entries(gapScore)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([ruolo, score]) => {
+        const satTit = saturazioneTitolari[ruolo] || 0;
+        let urgenza, colore;
+        if (score >= 8) { urgenza = "🔴 URGENTE"; colore = "bg-red-100 border-red-400 text-red-800"; }
+        else if (score >= 4) { urgenza = "🟡 IMPORTANTE"; colore = "bg-yellow-100 border-yellow-400 text-yellow-800"; }
+        else { urgenza = "🟢 UTILE"; colore = "bg-green-100 border-green-400 text-green-800"; }
+        return { ruolo, score: score.toFixed(1), urgenza, colore, satTit };
+      });
+  };
+
+  const priorita = calcolaPrioritaEmergenti();
   const getSuggerimento = () => {
     if (titolari.length === 0) return "Inizia ad aggiungere giocatori!";
     const top = risultati[0];
