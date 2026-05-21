@@ -62,9 +62,9 @@ function FantacalcioBuilder() {
   };
 
   const vincolanti = { 
-    "T": 3, "W": 2.5, "M": 2.2, "DS": 2, "DD": 2, 
-    "E": 1.8, "A": 1.5, "C": 1.3, "PC": 1, "DC": 0.8, "B": 0.5 
-  };
+  "T": 6.0, "E": 5.5, "C": 5.0, "W": 4.0, "A": 3.5,
+  "M": 3.2, "DD": 3.0, "DS": 2.8, "PC": 2.5, "DC": 1.5, "B": 0.8
+ };
 
   const gerarchiaRuoli = ["DC", "B", "DD", "DS", "E", "M", "C", "W", "T", "A", "PC"];
 
@@ -163,12 +163,15 @@ function FantacalcioBuilder() {
     else setPanchina([...panchina, giocatore]);
   };
 
-  const normalizzaRuolo = (ruolo) => {
-    if (!ruolo) return [];
-    ruolo = ruolo.toUpperCase().trim().replace(/\s/g, '');
-    if (ruolo.includes('/')) return ruolo.split('/').filter(r => r.length > 0);
-    return [ruolo];
+ const normalizzaRuolo = (ruolo) => {
+  if (!ruolo) return { primario: [], emergenza: [] };
+  ruolo = ruolo.toUpperCase().trim().replace(/\s/g, '');
+  const parti = ruolo.includes('/') ? ruolo.split('/') : ruolo.includes(';') ? ruolo.split(';') : [ruolo];
+  return {
+    primario: parti.length > 0 ? [parti[0]] : [],
+    emergenza: parti.length > 1 ? parti.slice(1) : []
   };
+};
 
   const getPrioritaRuolo = (ruolo) => {
     const idx = gerarchiaRuoli.indexOf(ruolo);
@@ -177,16 +180,15 @@ function FantacalcioBuilder() {
 
   const calcolaSlotCoperti = (slots, giocatori) => {
     const slotsCoperti = Array(slots.length).fill(false);
-    const giocatoriNorm = giocatori.map(g => normalizzaRuolo(g.ruolo));
     const usati = Array(giocatori.length).fill(false);
 
     slots.forEach((slot, i) => {
       let bestIdx = -1;
       let bestPrio = 999;
-      for (let g = 0; g < giocatoriNorm.length; g++) {
+      for (let g = 0; g < giocatori.length; g++) {
         if (usati[g]) continue;
-        const ruoli = giocatoriNorm[g];
-        for (let r of ruoli) {
+        const { primario } = normalizzaRuolo(giocatori[g].ruolo);
+        for (let r of primario) {
           if (slot.includes(r)) {
             const prio = getPrioritaRuolo(r);
             if (prio < bestPrio) {
@@ -207,7 +209,7 @@ function FantacalcioBuilder() {
   const calcolaBonusConcentrazione = (giocatori, slots) => {
     const conteggio = {};
     giocatori.forEach(g => {
-      normalizzaRuolo(g.ruolo).forEach(r => {
+      normalizzaRuolo(g.ruolo).primario.forEach(r => {
         conteggio[r] = (conteggio[r] || 0) + 1;
       });
     });
@@ -366,7 +368,7 @@ function FantacalcioBuilder() {
     const giaPreso = [...titolari, ...panchina].find(g => g.nome === giocatore.nome);
     if (giaPreso) return "preso";
     
-    const ruoli = normalizzaRuolo(giocatore.ruolo);
+     const { primario: ruoli } = normalizzaRuolo(giocatore.ruolo);
     let priorita = 0;
     let compatibile = false;
 
