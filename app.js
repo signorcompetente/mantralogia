@@ -181,8 +181,56 @@ function FantacalcioBuilder() {
   const slotsCoperti = Array(slots.length).fill(false);
   const usati = Array(giocatori.length).fill(false);
 
-  // PASSATA 1 — assegna ogni giocatore nel suo ruolo primario
+  // PASSATA 1 — matching ottimale per ruolo primario
+  // Per ogni giocatore, assegnalo allo slot più restrittivo che può coprire
+  let cambiamento = true;
+  while (cambiamento) {
+    cambiamento = false;
+    for (let g = 0; g < giocatori.length; g++) {
+      if (usati[g]) continue;
+      const { primario } = normalizzaRuolo(giocatori[g].ruolo);
+      
+      // Trova tutti gli slot che questo giocatore può coprire
+      let slotCandidati = [];
+      slots.forEach((slot, i) => {
+        if (slotsCoperti[i]) return;
+        for (let r of primario) {
+          if (slot.includes(r)) { slotCandidati.push(i); break; }
+        }
+      });
+
+      if (slotCandidati.length === 0) continue;
+
+      // Trova lo slot più restrittivo — quello che meno altri giocatori possono coprire
+      let slotPiuRestrittivo = -1;
+      let minCopertura = 999;
+      slotCandidati.forEach(si => {
+        let copertura = 0;
+        for (let g2 = 0; g2 < giocatori.length; g2++) {
+          if (usati[g2] || g2 === g) continue;
+          const { primario: p2 } = normalizzaRuolo(giocatori[g2].ruolo);
+          for (let r of p2) {
+            if (slots[si].includes(r)) { copertura++; break; }
+          }
+        }
+        if (copertura < minCopertura) {
+          minCopertura = copertura;
+          slotPiuRestrittivo = si;
+        }
+      });
+
+      if (slotPiuRestrittivo !== -1 && minCopertura === 0) {
+        // Questo slot può essere coperto SOLO da questo giocatore — assegna subito
+        slotsCoperti[slotPiuRestrittivo] = true;
+        usati[g] = true;
+        cambiamento = true;
+      }
+    }
+  }
+
+  // Assegna i giocatori rimasti agli slot rimasti per ruolo primario
   slots.forEach((slot, i) => {
+    if (slotsCoperti[i]) return;
     let bestIdx = -1, bestPrio = 999;
     for (let g = 0; g < giocatori.length; g++) {
       if (usati[g]) continue;
@@ -194,14 +242,10 @@ function FantacalcioBuilder() {
         }
       }
     }
-    if (bestIdx !== -1) {
-      slotsCoperti[i] = true;
-      usati[bestIdx] = true;
-    }
+    if (bestIdx !== -1) { slotsCoperti[i] = true; usati[bestIdx] = true; }
   });
 
-  // PASSATA 2 — per slot ancora scoperti, usa ruolo emergenza
-  // solo se il ruolo primario di quel giocatore è già coperto da qualcun altro
+  // PASSATA 2 — ruolo emergenza per slot ancora scoperti
   slots.forEach((slot, i) => {
     if (slotsCoperti[i]) return;
     let bestIdx = -1, bestPrio = 999;
@@ -215,10 +259,7 @@ function FantacalcioBuilder() {
         }
       }
     }
-    if (bestIdx !== -1) {
-      slotsCoperti[i] = true;
-      usati[bestIdx] = true;
-    }
+    if (bestIdx !== -1) { slotsCoperti[i] = true; usati[bestIdx] = true; }
   });
 
   return slotsCoperti;
