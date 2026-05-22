@@ -240,7 +240,8 @@ slots.forEach((slot, i) => {
     const { primario } = normalizzaRuolo(giocatori[g].ruolo);
     const copre = primario.some(r => slot.includes(r));
     if (!copre) continue;
-    const fmv = getFMV(giocatori[g].nome) || 0;
+    const entry = database[giocatori[g].nome]; 
+    const fmv = (entry && typeof entry === 'object' && entry.fmv) ? entry.fmv : 0;
     const copreSlot0Questo = primario.includes(slot[0]);
     // Preferisce chi copre slot[0], poi chi ha FMV più alta
     if (
