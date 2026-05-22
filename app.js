@@ -289,39 +289,38 @@ const calcolaPrioritaEmergenti = () => {
     });
 
     const gapScore = {};
-top3.forEach((mod, idx) => {
-  const pesoModulo = idx === 0 ? 3 : idx === 1 ? 2 : 1;
-  
-  // Conta quante volte ogni ruolo è richiesto in questo modulo
-  const richiestiModulo = {};
-  mod.slots.forEach(slot => {
-    slot.forEach(r => {
-      richiestiModulo[r] = (richiestiModulo[r] || 0) + 1;
-    });
-  });
+    top3.forEach((mod, idx) => {
+      const pesoModulo = idx === 0 ? 3 : idx === 1 ? 2 : 1;
 
-  // Gap titolari (peso 80%)
-  mod.mancantiTitolari.forEach(mancante => {
-    mancante.split('/').forEach(r => {
-      const satTit = saturazioneTitolari[r] || 0;
-      const richiesti = richiestiModulo[r] || 1;
-      const fattoreSaturazione = Math.max(0, (richiesti - satTit) / richiesti);
-      const pesoRuolo = vincolanti[r] || 1;
-      gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattoreSaturazione * 0.8;
-    });
-  });
+      // Conta quanti slot richiede ogni ruolo in questo modulo
+      const richiestiModulo = {};
+      mod.slots.forEach(slot => {
+        slot.forEach(r => {
+          richiestiModulo[r] = (richiestiModulo[r] || 0) + 1;
+        });
+      });
 
-  // Gap panchina (peso 20%)
-  mod.mancantiPanchina.forEach(mancante => {
-    mancante.split('/').forEach(r => {
-      const satPan = saturazionePanchina[r] || 0;
-      const richiesti = richiestiModulo[r] || 1;
-      const fattoreSaturazione = Math.max(0, (richiesti - satPan) / richiesti);
-      const pesoRuolo = vincolanti[r] || 1;
-      gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattoreSaturazione * 0.2;
+      // Per ogni ruolo richiesto dal modulo, calcola il gap reale
+      Object.entries(richiestiModulo).forEach(([r, richiesti]) => {
+        const satTit = saturazioneTitolari[r] || 0;
+        const satTot = satTit + (saturazionePanchina[r] || 0);
+        const pesoRuolo = vincolanti[r] || 1;
+
+        // Gap titolari (peso 80%)
+        const gapTit = Math.max(0, richiesti - satTit);
+        if (gapTit > 0) {
+          const fattore = gapTit / richiesti;
+          gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattore * 0.8;
+        }
+
+        // Gap panchina (peso 20%)
+        const gapTot = Math.max(0, richiesti - satTot);
+        if (gapTot > 0) {
+          const fattore = gapTot / richiesti;
+          gapScore[r] = (gapScore[r] || 0) + pesoModulo * pesoRuolo * fattore * 0.2;
+        }
+      });
     });
-  });
-});
 
     return Object.entries(gapScore)
       .sort((a, b) => b[1] - a[1])
