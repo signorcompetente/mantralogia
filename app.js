@@ -1,7 +1,6 @@
 const { useState, useEffect } = React;
 function FantacalcioSwitch() {
   const [vistaCorrente, setVistaCorrente] = useState('builder');
-
   return (
     <div className="min-h-screen relative">
       {/* BOTTONE SWITCH FISSO */}
@@ -179,32 +178,51 @@ function FantacalcioBuilder() {
   };
 
   const calcolaSlotCoperti = (slots, giocatori) => {
-    const slotsCoperti = Array(slots.length).fill(false);
-    const usati = Array(giocatori.length).fill(false);
+  const slotsCoperti = Array(slots.length).fill(false);
+  const usati = Array(giocatori.length).fill(false);
 
-    slots.forEach((slot, i) => {
-      let bestIdx = -1;
-      let bestPrio = 999;
-      for (let g = 0; g < giocatori.length; g++) {
-        if (usati[g]) continue;
-        const { primario } = normalizzaRuolo(giocatori[g].ruolo);
-        for (let r of primario) {
-          if (slot.includes(r)) {
-            const prio = getPrioritaRuolo(r);
-            if (prio < bestPrio) {
-              bestPrio = prio;
-              bestIdx = g;
-            }
-          }
+  // PASSATA 1 — assegna ogni giocatore nel suo ruolo primario
+  slots.forEach((slot, i) => {
+    let bestIdx = -1, bestPrio = 999;
+    for (let g = 0; g < giocatori.length; g++) {
+      if (usati[g]) continue;
+      const { primario } = normalizzaRuolo(giocatori[g].ruolo);
+      for (let r of primario) {
+        if (slot.includes(r)) {
+          const prio = getPrioritaRuolo(r);
+          if (prio < bestPrio) { bestPrio = prio; bestIdx = g; }
         }
       }
-      if (bestIdx !== -1) {
-        slotsCoperti[i] = true;
-        usati[bestIdx] = true;
+    }
+    if (bestIdx !== -1) {
+      slotsCoperti[i] = true;
+      usati[bestIdx] = true;
+    }
+  });
+
+  // PASSATA 2 — per slot ancora scoperti, usa ruolo emergenza
+  // solo se il ruolo primario di quel giocatore è già coperto da qualcun altro
+  slots.forEach((slot, i) => {
+    if (slotsCoperti[i]) return;
+    let bestIdx = -1, bestPrio = 999;
+    for (let g = 0; g < giocatori.length; g++) {
+      if (usati[g]) continue;
+      const { emergenza } = normalizzaRuolo(giocatori[g].ruolo);
+      for (let r of emergenza) {
+        if (slot.includes(r)) {
+          const prio = getPrioritaRuolo(r);
+          if (prio < bestPrio) { bestPrio = prio; bestIdx = g; }
+        }
       }
-    });
-    return slotsCoperti;
-  };
+    }
+    if (bestIdx !== -1) {
+      slotsCoperti[i] = true;
+      usati[bestIdx] = true;
+    }
+  });
+
+  return slotsCoperti;
+};
 
   const calcolaBonusConcentrazione = (giocatori, slots) => {
     const conteggio = {};
