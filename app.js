@@ -231,22 +231,29 @@ function FantacalcioBuilder() {
     }
   }
 
-  // Assegna giocatori rimasti per ruolo primario
-  slots.forEach((slot, i) => {
-    if (slotsCoperti[i]) return;
-    let bestIdx = -1, bestPrio = 999;
-    for (let g = 0; g < giocatori.length; g++) {
-      if (usati[g]) continue;
-      const { primario } = normalizzaRuolo(giocatori[g].ruolo);
-      for (let r of primario) {
-        if (slot.includes(r)) {
-          const prio = getPrioritaRuolo(r);
-          if (prio < bestPrio) { bestPrio = prio; bestIdx = g; }
-        }
-      }
+ // Assegna giocatori rimasti — chi ha FMV più alta vince
+slots.forEach((slot, i) => {
+  if (slotsCoperti[i]) return;
+  let bestIdx = -1, bestFMV = -1, copreSlot0 = false;
+  for (let g = 0; g < giocatori.length; g++) {
+    if (usati[g]) continue;
+    const { primario } = normalizzaRuolo(giocatori[g].ruolo);
+    const copre = primario.some(r => slot.includes(r));
+    if (!copre) continue;
+    const fmv = getFMV(giocatori[g].nome) || 0;
+    const copreSlot0Questo = primario.includes(slot[0]);
+    // Preferisce chi copre slot[0], poi chi ha FMV più alta
+    if (
+      (!copreSlot0 && copreSlot0Questo) ||
+      (copreSlot0 === copreSlot0Questo && fmv > bestFMV)
+    ) {
+      bestIdx = g;
+      bestFMV = fmv;
+      copreSlot0 = copreSlot0Questo;
     }
-    if (bestIdx !== -1) { slotsCoperti[i] = true; usati[bestIdx] = true; }
-  });
+  }
+  if (bestIdx !== -1) { slotsCoperti[i] = true; usati[bestIdx] = true; }
+});
 
   // PASSATA 2 — ruolo emergenza per slot ancora scoperti
   slots.forEach((slot, i) => {
