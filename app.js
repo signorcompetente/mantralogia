@@ -182,7 +182,6 @@ function FantacalcioBuilder() {
   const usati = Array(giocatori.length).fill(false);
 
   // PASSATA 1 — matching ottimale per ruolo primario
-  // Per ogni giocatore, assegnalo allo slot più restrittivo che può coprire
   let cambiamento = true;
   while (cambiamento) {
     cambiamento = false;
@@ -190,7 +189,6 @@ function FantacalcioBuilder() {
       if (usati[g]) continue;
       const { primario } = normalizzaRuolo(giocatori[g].ruolo);
       
-      // Trova tutti gli slot che questo giocatore può coprire
       let slotCandidati = [];
       slots.forEach((slot, i) => {
         if (slotsCoperti[i]) return;
@@ -201,10 +199,12 @@ function FantacalcioBuilder() {
 
       if (slotCandidati.length === 0) continue;
 
-      // Trova lo slot più restrittivo — quello che meno altri giocatori possono coprire
       let slotPiuRestrittivo = -1;
       let minCopertura = 999;
+      let minRuoliSlot = 999;
+
       slotCandidati.forEach(si => {
+        const ruoliSlot = slots[si].length;
         let copertura = 0;
         for (let g2 = 0; g2 < giocatori.length; g2++) {
           if (usati[g2] || g2 === g) continue;
@@ -213,14 +213,17 @@ function FantacalcioBuilder() {
             if (slots[si].includes(r)) { copertura++; break; }
           }
         }
-        if (copertura < minCopertura) {
+        if (
+          copertura < minCopertura ||
+          (copertura === minCopertura && ruoliSlot < minRuoliSlot)
+        ) {
           minCopertura = copertura;
+          minRuoliSlot = ruoliSlot;
           slotPiuRestrittivo = si;
         }
       });
 
       if (slotPiuRestrittivo !== -1 && minCopertura === 0) {
-        // Questo slot può essere coperto SOLO da questo giocatore — assegna subito
         slotsCoperti[slotPiuRestrittivo] = true;
         usati[g] = true;
         cambiamento = true;
@@ -228,7 +231,7 @@ function FantacalcioBuilder() {
     }
   }
 
-  // Assegna i giocatori rimasti agli slot rimasti per ruolo primario
+  // Assegna giocatori rimasti per ruolo primario
   slots.forEach((slot, i) => {
     if (slotsCoperti[i]) return;
     let bestIdx = -1, bestPrio = 999;
