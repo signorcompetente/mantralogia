@@ -177,9 +177,10 @@ function FantacalcioBuilder() {
     return idx === -1 ? 999 : idx;
   };
 
-  const calcolaSlotCoperti = (slots, giocatori) => {
+  const calcolaSlotCoperti = (slots, giocatori, trackFuoriRuolo = false) => {
   const slotsCoperti = Array(slots.length).fill(false);
   const usati = Array(giocatori.length).fill(false);
+  const fuoriRuolo = [];
 
   // PASSATA 1 — matching ottimale per ruolo primario
   let cambiamento = true;
@@ -270,10 +271,21 @@ slots.forEach((slot, i) => {
         }
       }
     }
-    if (bestIdx !== -1) { slotsCoperti[i] = true; usati[bestIdx] = true; }
+    if (bestIdx !== -1) {
+      slotsCoperti[i] = true;
+      usati[bestIdx] = true;
+      if (trackFuoriRuolo && giocatori[bestIdx].nome !== '__SIM__') {
+        const { primario } = normalizzaRuolo(giocatori[bestIdx].ruolo);
+        fuoriRuolo.push({
+          nome: giocatori[bestIdx].nome,
+          ruoloPrimario: primario[0],
+          ruoloUsato: slots[i][0]
+        });
+      }
+    }
   });
 
-  return slotsCoperti;
+  return trackFuoriRuolo ? { slotsCoperti, fuoriRuolo } : slotsCoperti;
 };
 
   const calcolaBonusConcentrazione = (giocatori, slots) => {
