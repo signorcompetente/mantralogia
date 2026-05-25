@@ -342,8 +342,9 @@ slots.forEach((slot, i) => {
     });
   };
 
-  const risultati = calcolaRisultati();
-  const top3 = risultati.slice(0, 3);
+  const risultati_tutti = calcolaRisultati();
+const risultati = risultati_tutti; // alias per compatibilità UI
+const top3 = risultati_tutti.slice(0, 3);
 const calcolaPrioritaEmergenti = () => {
     if (titolari.length < 3) return [];
 
@@ -357,7 +358,7 @@ const calcolaPrioritaEmergenti = () => {
       const { primario } = normalizzaRuolo(g.ruolo);
       primario.forEach(r => { saturazionePanchina[r] = (saturazionePanchina[r] || 0) + 1; });
     });
-
+  
     const gapScore = {};
     top3.forEach((mod, idx) => {
       const pesoModulo = idx === 0 ? 3 : idx === 1 ? 2 : 1;
@@ -406,6 +407,58 @@ const calcolaPrioritaEmergenti = () => {
   };
 
   const priorita = calcolaPrioritaEmergenti();
+  const calcolaPorteAperte = () => {
+  if (titolari.length < 3) return [];
+
+  const ruoliMancanti = new Set();
+  top3.forEach(mod => {
+    mod.mancantiTitolari.forEach(m => {
+      m.split('/').forEach(r => ruoliMancanti.add(r));
+    });
+  });
+
+  const top3Nomi = new Set(top3.map(m => m.nome));
+
+  const porte = [];
+  ruoliMancanti.forEach(ruolo => {
+    const titolariSimulati = [...titolari, { nome: '__SIM__', ruolo }];
+
+    let bestGuadagno = -1;
+    let bestModulo = null;
+    let bestDa = 0;
+    let bestA = 0;
+
+    Object.keys(moduli).forEach(nomeModulo => {
+      if (top3Nomi.has(nomeModulo)) return;
+      const slots = moduli[nomeModulo];
+
+      const slotsTit = calcolaSlotCoperti(slots, titolariSimulati);
+      const percTitSim = (slotsTit.filter(Boolean).length / slots.length) * 100;
+      const slotsTot = calcolaSlotCoperti(slots, [...titolariSimulati, ...panchina]);
+      const percTotSim = (slotsTot.filter(Boolean).length / slots.length) * 100;
+      const percSim = percTitSim * 0.75 + percTotSim * 0.25;
+
+      const attuale = risultati_tutti.find(r => r.nome === nomeModulo);
+      if (!attuale) return;
+      const guadagno = percSim - attuale.percentMatch;
+
+      if (guadagno > bestGuadagno) {
+        bestGuadagno = guadagno;
+        bestModulo = nomeModulo;
+        bestDa = Math.round(attuale.percentMatch);
+        bestA = Math.round(percSim);
+      }
+    });
+
+    if (bestModulo && bestGuadagno > 5) {
+      porte.push({ ruolo, modulo: bestModulo, da: bestDa, a: bestA });
+    }
+  });
+
+  return porte.slice(0, 4);
+};
+
+const porteAperte = calcolaPorteAperte();
   const getSuggerimento = () => {
     if (titolari.length === 0) return "Inizia ad aggiungere giocatori!";
     const top = risultati[0];
