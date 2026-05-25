@@ -471,6 +471,24 @@ const calcolaPrioritaEmergenti = () => {
 };
 
 const porteAperte = calcolaPorteAperte();
+  const calcolaFuoriRuolo = () => {
+  const avvisi = [];
+  top3.forEach(mod => {
+    const result = calcolaSlotCoperti(mod.slots, titolari, true);
+    result.fuoriRuolo.forEach(fr => {
+      avvisi.push({ ...fr, modulo: mod.nome });
+    });
+  });
+  const visti = new Set();
+  return avvisi.filter(a => {
+    const key = `${a.nome}-${a.modulo}`;
+    if (visti.has(key)) return false;
+    visti.add(key);
+    return true;
+  });
+};
+
+const fuoriRuoloAvvisi = calcolaFuoriRuolo();
   const getSuggerimento = () => {
     if (titolari.length === 0) return "Inizia ad aggiungere giocatori!";
     const top = risultati[0];
