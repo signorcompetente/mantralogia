@@ -743,7 +743,7 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     
   {/* PANNELLO PORTE APERTE — fixed top left */}
 {titolari.length >= 3 && (porteAperte.length > 0 || fuoriRuoloAvvisi.length > 0) && (
-  <div className="fixed top-4 left-4 z-50 w-80 rounded-2xl shadow-2xl overflow-hidden" style={{fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
+  <div className="fixed top-4 left-4 z-50 w-96 rounded-2xl shadow-2xl overflow-hidden" style={{fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
     {/* Spirale in cima */}
     <div className="flex justify-around items-center px-4 py-1" style={{background: '#e8e0a0', borderBottom: '2px solid #d4c97a'}}>
       {[...Array(10)].map((_, i) => (
@@ -754,13 +754,13 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     <div className="relative p-4" style={{backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #c8d8f0 27px, #c8d8f0 28px)', backgroundSize: '100% 28px', minHeight: '120px'}}>
       <div className="absolute top-0 bottom-0" style={{left: '28px', width: '2px', background: '#f08080', opacity: 0.6}}></div>
       <div className="pl-6">
-        <h3 className="text-sm font-black text-slate-800 mb-3">📓 Block Notes</h3>
+        <h3 className="text-base font-black text-slate-800 mb-3">📓 Block Notes</h3>
         {porteAperte.length > 0 && (
           <div className="mb-3">
-            <p className="text-xs font-bold text-indigo-700 mb-2">🚪 Porte aperte</p>
+            <p className="text-sm font-bold text-indigo-700 mb-2">🚪 Porte aperte</p>
             <div className="space-y-1">
               {porteAperte.map((p, i) => (
-                <div key={i} className="text-xs bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2">
+                <div key={i} className="text-xm bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2">
                   <span className="font-bold text-indigo-800">Se prendi {p.ruolo}</span>
                   <span className="text-slate-600"> → entra </span>
                   <span className="font-bold text-green-700">{p.modulo}</span>
@@ -772,10 +772,10 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
         )}
         {fuoriRuoloAvvisi.length > 0 && (
           <div>
-            <p className="text-xs font-bold text-orange-700 mb-2">⚠️ Fuori ruolo</p>
+            <p className="text-sm font-bold text-orange-700 mb-2">⚠️ Fuori ruolo</p>
             <div className="space-y-1">
               {fuoriRuoloAvvisi.map((a, i) => (
-                <div key={i} className="text-xs bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                <div key={i} className="text-sm bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
                   <span className="font-bold text-orange-800">{a.nome}</span>
                   <span className="text-slate-600"> usato come </span>
                   <span className="font-bold">{a.ruoloUsato}</span>
