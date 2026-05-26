@@ -789,7 +789,7 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     </div>
   </div>
 )}
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6" style={{paddingLeft: '280px'}}>
         
         {/* HEADER */}
         <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6">
