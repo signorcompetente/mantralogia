@@ -60,10 +60,62 @@ function FantacalcioBuilder() {
     "4231": [["DD"], ["DC"], ["DC"], ["DS"], ["M"], ["M","C"], ["W","T"], ["T"], ["W","A"], ["A","PC"]]
   };
 
-  const vincolanti = { 
+  const calcolaVincolanti = () => {
+  if (Object.keys(database).length === 0) return null;
+
+  // Conta giocatori per ruolo primario
+  const conteggioRuoli = {};
+  Object.values(database).forEach(entry => {
+    const ruolo = typeof entry === 'string' ? entry : entry.ruolo;
+    const primario = ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
+    conteggioRuoli[primario] = (conteggioRuoli[primario] || 0) + 1;
+  });
+
+  // Conta slot richiesti per ruolo in tutti i moduli
+  const slotRuoli = {};
+  Object.values(moduli).forEach(slots => {
+    slots.forEach(slot => {
+      slot.forEach(r => {
+        slotRuoli[r] = (slotRuoli[r] || 0) + 1;
+      });
+    });
+  });
+
+  // FMV media per ruolo
+  const fmvSomma = {};
+  const fmvCount = {};
+  Object.values(database).forEach(entry => {
+    if (typeof entry === 'object' && entry.fmv) {
+      const primario = entry.ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
+      fmvSomma[primario] = (fmvSomma[primario] || 0) + entry.fmv;
+      fmvCount[primario] = (fmvCount[primario] || 0) + 1;
+    }
+  });
+
+  // Calcola peso per ruolo
+  const pesi = {};
+  const ruoli = ["DC", "B", "DD", "DS", "E", "M", "C", "W", "T", "A", "PC"];
+  ruoli.forEach(r => {
+    const disponibili = conteggioRuoli[r] || 1;
+    const richiesti = slotRuoli[r] || 0;
+    const fmvMedia = fmvCount[r] ? fmvSomma[r] / fmvCount[r] : 50;
+    const scarsita = richiesti / disponibili;
+    pesi[r] = scarsita * (fmvMedia / 100);
+  });
+
+  // Normalizza su scala 0-10
+  const maxPeso = Math.max(...Object.values(pesi));
+  ruoli.forEach(r => {
+    pesi[r] = maxPeso > 0 ? parseFloat(((pesi[r] / maxPeso) * 10).toFixed(2)) : 1;
+  });
+
+  return pesi;
+};
+
+const vincolanti = calcolaVincolanti() || {
   "T": 6.0, "E": 5.5, "C": 5.0, "W": 4.0, "A": 3.5,
   "M": 3.2, "DD": 3.0, "DS": 2.8, "PC": 2.5, "DC": 1.5, "B": 0.8
- };
+};
 
   const gerarchiaRuoli = ["DC", "B", "DD", "DS", "E", "M", "C", "W", "T", "A", "PC"];
 
