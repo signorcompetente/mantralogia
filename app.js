@@ -743,28 +743,26 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     
   {/* PANNELLO PORTE APERTE — fixed top left */}
 {titolari.length >= 3 && (porteAperte.length > 0 || fuoriRuoloAvvisi.length > 0) && (
-  <div className="fixed top-4 left-4 z-50 w-64 rounded-2xl shadow-2xl overflow-hidden" style={{fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
-    {/* Spirale in cima */}
+  <div className="fixed top-4 left-4 z-50 rounded-2xl shadow-2xl overflow-hidden" style={{width: '240px', fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
     <div className="flex justify-around items-center px-4 py-1" style={{background: '#e8e0a0', borderBottom: '2px solid #d4c97a'}}>
       {[...Array(10)].map((_, i) => (
-        <div key={i} style={{width: '14px', height: '14px', borderRadius: '50%', background: '#888', border: '2px solid #555', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'}}></div>
+        <div key={i} style={{width: '12px', height: '12px', borderRadius: '50%', background: '#888', border: '2px solid #555'}}></div>
       ))}
     </div>
-    {/* Corpo blocco notes */}
-    <div className="relative p-4" style={{backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #c8d8f0 27px, #c8d8f0 28px)', backgroundSize: '100% 28px', minHeight: '120px'}}>
-      <div className="absolute top-0 bottom-0" style={{left: '28px', width: '2px', background: '#f08080', opacity: 0.6}}></div>
-      <div className="pl-6">
-        <h3 className="text-base font-black text-slate-800 mb-3">📓 Block Notes</h3>
+    <div className="relative p-3" style={{backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #c8d8f0 23px, #c8d8f0 24px)', backgroundSize: '100% 24px'}}>
+      <div className="absolute top-0 bottom-0" style={{left: '24px', width: '2px', background: '#f08080', opacity: 0.6}}></div>
+      <div className="pl-5">
+        <h3 className="text-sm font-black text-slate-800 mb-2">📓 Block Notes</h3>
         {porteAperte.length > 0 && (
-          <div className="mb-3">
-            <p className="text-sm font-bold text-indigo-700 mb-2">🚪 Porte aperte</p>
+          <div className="mb-2">
+            <p className="text-xs font-bold text-indigo-700 mb-1">🚪 Porte aperte</p>
             <div className="space-y-1">
               {porteAperte.map((p, i) => (
-                <div key={i} className="text-xm bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2">
-                  <span className="font-bold text-indigo-800">Se prendi {p.ruolo}</span>
-                  <span className="text-slate-600"> → entra </span>
+                <div key={i} className="text-xs bg-indigo-50 border border-indigo-200 rounded px-2 py-1">
+                  <span className="font-bold text-indigo-800">{p.ruolo}</span>
+                  <span className="text-slate-600"> → </span>
                   <span className="font-bold text-green-700">{p.modulo}</span>
-                  <span className="text-slate-500"> ({p.da}%→{p.a}%)</span>
+                  <span className="text-slate-500"> {p.da}%→{p.a}%</span>
                 </div>
               ))}
             </div>
@@ -772,14 +770,12 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
         )}
         {fuoriRuoloAvvisi.length > 0 && (
           <div>
-            <p className="text-sm font-bold text-orange-700 mb-2">⚠️ Fuori ruolo</p>
+            <p className="text-xs font-bold text-orange-700 mb-1">⚠️ Fuori ruolo</p>
             <div className="space-y-1">
               {fuoriRuoloAvvisi.map((a, i) => (
-                <div key={i} className="text-sm bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                <div key={i} className="text-xs bg-orange-50 border border-orange-200 rounded px-2 py-1">
                   <span className="font-bold text-orange-800">{a.nome}</span>
-                  <span className="text-slate-600"> usato come </span>
-                  <span className="font-bold">{a.ruoloUsato}</span>
-                  <span className="text-slate-500"> (è {a.ruoloPrimario}) nel {a.modulo}</span>
+                  <span className="text-slate-500"> ({a.ruoloPrimario}→{a.ruoloUsato}) {a.modulo}</span>
                 </div>
               ))}
             </div>
