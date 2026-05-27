@@ -82,15 +82,21 @@ function FantacalcioBuilder() {
   });
 
   // FMV media per ruolo
-  const fmvSomma = {};
-  const fmvCount = {};
-  Object.values(database).forEach(entry => {
-    if (typeof entry === 'object' && entry.fmv) {
-      const primario = entry.ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
-      fmvSomma[primario] = (fmvSomma[primario] || 0) + entry.fmv;
-      fmvCount[primario] = (fmvCount[primario] || 0) + 1;
-    }
-  });
+  const fmvPerRuolo = {};
+Object.values(database).forEach(entry => {
+  if (typeof entry === 'object' && entry.fmv) {
+    const primario = entry.ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
+    if (!fmvPerRuolo[primario]) fmvPerRuolo[primario] = [];
+    fmvPerRuolo[primario].push(entry.fmv);
+  }
+});
+
+// Usa media dei top 8 per ruolo invece della media totale
+const fmvMedia = {};
+Object.entries(fmvPerRuolo).forEach(([r, valori]) => {
+  const top8 = valori.sort((a, b) => b - a).slice(0, 8);
+  fmvMedia[r] = top8.reduce((s, v) => s + v, 0) / top8.length;
+});
 
   // Calcola peso per ruolo
   const pesi = {};
@@ -98,7 +104,9 @@ function FantacalcioBuilder() {
   ruoli.forEach(r => {
     const disponibili = conteggioRuoli[r] || 1;
     const richiesti = slotRuoli[r] || 0;
-    const fmvMedia = fmvCount[r] ? fmvSomma[r] / fmvCount[r] : 50;
+    const fmvMediaRuolo = fmvMedia[r] || 50; 
+    const scarsita = richiesti / disponibili; 
+    pesi[r] = scarsita * (fmvMediaRuolo / 100);
     const scarsita = richiesti / disponibili;
     pesi[r] = scarsita * (fmvMedia / 100);
   });
