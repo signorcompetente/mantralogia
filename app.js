@@ -111,7 +111,7 @@ function FantacalcioBuilder() {
 
   return pesi;
 };
-
+console.log("Vincolanti calcolati:", calcolaVincolanti());
 const vincolanti = calcolaVincolanti() || {
   "T": 6.0, "E": 5.5, "C": 5.0, "W": 4.0, "A": 3.5,
   "M": 3.2, "DD": 3.0, "DS": 2.8, "PC": 2.5, "DC": 1.5, "B": 0.8
