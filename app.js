@@ -107,8 +107,6 @@ Object.entries(fmvPerRuolo).forEach(([r, valori]) => {
     const fmvMediaRuolo = fmvMedia[r] || 50; 
     const scarsita = richiesti / disponibili; 
     pesi[r] = scarsita * (fmvMediaRuolo / 100);
-    const scarsita = richiesti / disponibili;
-    pesi[r] = scarsita * (fmvMedia / 100);
   });
 
   // Normalizza su scala 0-10
