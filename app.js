@@ -920,7 +920,12 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     <p className="text-xs text-slate-400 mt-2">Si aggiorna ad ogni giocatore aggiunto · ruolo primario 80% · emergenza 20%</p>
   </div>
 )}
-
+{Object.keys(database).length === 0 && (
+  <div className="bg-red-100 border-2 border-red-400 rounded-xl p-4 text-center">
+    <p className="text-red-700 font-black text-lg">⚠️ Database non caricato</p>
+    <p className="text-red-600 text-sm mt-1">Clicca su 📊 Database in alto per importare il listone — il tool non funziona senza!</p>
+  </div>
+)}
 {titolari.length < 3 && (
   <div className="bg-slate-100 rounded-xl p-4 text-center text-slate-500 text-sm border border-slate-200">
     🎯 Le priorità emergenti appariranno dopo aver aggiunto almeno 3 titolari
