@@ -743,7 +743,7 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     
   {/* PANNELLO PORTE APERTE — fixed top left */}
 {titolari.length >= 3 && (porteAperte.length > 0 || fuoriRuoloAvvisi.length > 0) && (
-  <div className="fixed top-4 left-4 z-50 w-96 rounded-2xl shadow-2xl overflow-hidden" style={{fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
+  <div className="fixed top-4 left-4 z-50 w-75 rounded-2xl shadow-2xl overflow-hidden" style={{fontFamily: "'Courier New', monospace", background: '#fffef0', border: '2px solid #d4c97a', boxShadow: '4px 4px 12px rgba(0,0,0,0.2)'}}>
     {/* Spirale in cima */}
     <div className="flex justify-around items-center px-4 py-1" style={{background: '#e8e0a0', borderBottom: '2px solid #d4c97a'}}>
       {[...Array(10)].map((_, i) => (
@@ -792,7 +792,7 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* HEADER */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6" style={{marginLeft: '280px'}}>
+        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-4xl font-black text-white tracking-tight">⚽ Mantra Builder</h1>
