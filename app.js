@@ -789,10 +789,10 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
     </div>
   </div>
 )}
-      <div className="max-w-7xl mx-auto space-y-6" style={{paddingLeft: '280px'}}>
+      <div className="max-w-7xl mx-auto space-y-6">
         
         {/* HEADER */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6">
+        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6" style={{marginLeft: '280px'}}>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-4xl font-black text-white tracking-tight">⚽ Mantra Builder</h1>
