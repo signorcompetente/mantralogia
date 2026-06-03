@@ -340,7 +340,7 @@ slots.forEach((slot, i) => {
   return trackFuoriRuolo ? { slotsCoperti, fuoriRuolo } : slotsCoperti;
 };
 
-  const calcolaBonusConcentrazione = (giocatori, slots) => {
+  const calcolaBonusConcentrazione = (giocatori, slots, pesi) => {
     const conteggio = {};
     giocatori.forEach(g => {
       normalizzaRuolo(g.ruolo).primario.forEach(r => {
@@ -349,10 +349,10 @@ slots.forEach((slot, i) => {
     });
     let bonus = 0;
     Object.keys(conteggio).forEach(ruolo => {
-      if (conteggio[ruolo] >= 2 && vincolanti[ruolo] >= 2) {
+      if (conteggio[ruolo] >= 2 && pesi[ruolo] >= 2) {
         const richiesti = slots.filter(s => s.includes(ruolo)).length;
         if (conteggio[ruolo] >= richiesti && richiesti >= 2) {
-          bonus += vincolanti[ruolo] * conteggio[ruolo] * 0.3;
+          bonus += pesi[ruolo] * conteggio[ruolo] * 0.3;
         }
       }
     });
@@ -378,7 +378,7 @@ slots.forEach((slot, i) => {
           });
         }
       });
-      score += calcolaBonusConcentrazione(titolari, slots);
+      score += calcolaBonusConcentrazione(titolari, slots, pesi);
 
       const mancantiTit = [];
       slotsTit.forEach((coperto, i) => {
