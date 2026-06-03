@@ -1566,7 +1566,7 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
             </div>
           </div>
         )}
-
+        </div>
       </div>
     </div>
   );
