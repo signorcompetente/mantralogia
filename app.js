@@ -62,16 +62,12 @@ function FantacalcioBuilder() {
 
   const calcolaVincolanti = (top3Moduli = []) => {
   if (Object.keys(database).length === 0) return null;
-
-  // Conta giocatori per ruolo primario
   const conteggioRuoli = {};
   Object.values(database).forEach(entry => {
     const ruolo = typeof entry === 'string' ? entry : entry.ruolo;
     const primario = ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
     conteggioRuoli[primario] = (conteggioRuoli[primario] || 0) + 1;
   });
-
-  // Conta slot richiesti per ruolo — solo nei top3 se disponibili
   const slotRuoli = {};
   const moduliDaUsare = top3Moduli.length > 0 ? top3Moduli.map(m => moduli[m.nome]) : Object.values(moduli);
   moduliDaUsare.forEach(slots => {
@@ -81,8 +77,6 @@ function FantacalcioBuilder() {
       });
     });
   });
-
-  // FMV media top 8 per ruolo
   const fmvPerRuolo = {};
   Object.values(database).forEach(entry => {
     if (typeof entry === 'object' && entry.fmv) {
@@ -96,8 +90,6 @@ function FantacalcioBuilder() {
     const top8 = valori.sort((a, b) => b - a).slice(0, 8);
     fmvMedia[r] = top8.reduce((s, v) => s + v, 0) / top8.length;
   });
-
-  // Calcola peso per ruolo
   const pesi = {};
   const ruoli = ["DC", "B", "DD", "DS", "E", "M", "C", "W", "T", "A", "PC"];
   ruoli.forEach(r => {
@@ -107,15 +99,31 @@ function FantacalcioBuilder() {
     const scarsita = richiesti / disponibili;
     pesi[r] = scarsita * (fmvMediaRuolo / 100);
   });
-
-  // Normalizza su scala 0-10
   const maxPeso = Math.max(...Object.values(pesi));
   ruoli.forEach(r => {
     pesi[r] = maxPeso > 0 ? parseFloat(((pesi[r] / maxPeso) * 10).toFixed(2)) : 1;
   });
-
   return pesi;
 };
+
+const calcolaFMVMedia = () => {
+  const fmvPerRuolo = {};
+  Object.values(database).forEach(entry => {
+    if (typeof entry === 'object' && entry.fmv) {
+      const primario = entry.ruolo.toUpperCase().split('/')[0].split(';')[0].trim();
+      if (!fmvPerRuolo[primario]) fmvPerRuolo[primario] = [];
+      fmvPerRuolo[primario].push(entry.fmv);
+    }
+  });
+  const media = {};
+  Object.entries(fmvPerRuolo).forEach(([r, valori]) => {
+    const top8 = valori.sort((a, b) => b - a).slice(0, 8);
+    media[r] = top8.reduce((s, v) => s + v, 0) / top8.length;
+  });
+  return media;
+};
+
+const fmvMediaRuoli = calcolaFMVMedia();
 
 const gerarchiaRuoli = ["DC", "B", "DD", "DS", "E", "M", "C", "W", "T", "A", "PC"];
 
@@ -451,7 +459,8 @@ const calcolaPrioritaEmergenti = () => {
       Object.entries(richiestiModulo).forEach(([r, richiesti]) => {
         const satTit = saturazioneTitolari[r] || 0;
         const satTot = satTit + (saturazionePanchina[r] || 0);
-        const pesoRuolo = vincolanti[r] || 1;
+        const fmvMod = fmvMediaRuoli[r] ? Math.log(fmvMediaRuoli[r] + 1) / 3 : 1;
+const pesoRuolo = (vincolanti[r] || 1) * fmvMod;
 
         // Gap titolari (peso 80%)
         const gapTit = Math.max(0, richiesti - satTit);
