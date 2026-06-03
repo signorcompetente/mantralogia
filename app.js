@@ -1009,22 +1009,6 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
                   </div>
                 </div>
               )}
-
-              {/* SUGGERIMENTI ACQUISTO */}
-              {suggerimenti.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-lg p-3">
-                  <p className="text-sm font-bold mb-2">💡 Priorità Acquisti</p>
-                  <div className="space-y-1">
-                    {suggerimenti.map((s, i) => (
-                      <div key={i} className="bg-white bg-opacity-30 rounded px-2 py-1 text-xs">
-                        <span className="font-bold">{s.priorita}</span> - Cerca <strong>{s.ruolo}</strong> (serve in {s.count} moduli top3)
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
         })()}
         
         {/* PULSANTE APRI BUDGET TRACKER */}
