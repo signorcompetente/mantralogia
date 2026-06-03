@@ -359,7 +359,7 @@ slots.forEach((slot, i) => {
     return bonus;
   };
 
-  const calcolaRisultati = () => {
+  const calcolaRisultati = (pesi = vincolantiDefault) => {
     return Object.keys(moduli).map(nome => {
       const slots = moduli[nome];
       const slotsTit = calcolaSlotCoperti(slots, titolari);
@@ -370,7 +370,7 @@ slots.forEach((slot, i) => {
       slotsTit.forEach((coperto, i) => {
         if (coperto) {
           slots[i].forEach(r => {
-            if (vincolanti[r]) score += vincolanti[r];
+            if (pesi[r]) score += pesi[r];
           });
         }
       });
@@ -406,13 +406,16 @@ slots.forEach((slot, i) => {
     });
   };
 
-  const risultati_tutti = calcolaRisultati();
-const risultati = risultati_tutti; // alias per compatibilità UI
-const top3 = risultati_tutti.slice(0, 3);
-const vincolanti = calcolaVincolanti(top3) || {
+  const vincolantiDefault = {
   "T": 6.0, "E": 5.5, "C": 5.0, "W": 4.0, "A": 3.5,
   "M": 3.2, "DD": 3.0, "DS": 2.8, "PC": 2.5, "DC": 1.5, "B": 0.8
 };
+const risultati_preliminari = calcolaRisultati(vincolantiDefault);
+const top3_preliminare = risultati_preliminari.slice(0, 3);
+const vincolanti = calcolaVincolanti(top3_preliminare) || vincolantiDefault;
+const risultati_tutti = calcolaRisultati(vincolanti);
+const risultati = risultati_tutti;
+const top3 = risultati_tutti.slice(0, 3);
 const calcolaPrioritaEmergenti = () => {
     if (titolari.length < 3) return [];
 
