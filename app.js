@@ -417,6 +417,7 @@ slots.forEach((slot, i) => {
 const risultati_preliminari = calcolaRisultati(vincolantiDefault);
 const top3_preliminare = risultati_preliminari.slice(0, 3);
 const vincolanti = calcolaVincolanti(top3_preliminare) || vincolantiDefault;
+  console.log("Vincolanti calcolati:", calcolaVincolanti(top3_preliminare));
 const risultati_tutti = calcolaRisultati(vincolanti);
 const risultati = risultati_tutti;
 const top3 = risultati_tutti.slice(0, 3);
