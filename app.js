@@ -953,63 +953,63 @@ const fuoriRuoloAvvisi = calcolaFuoriRuolo();
   </div>
 )}
         {/* BUDGET TRACKER - COLLAPSABILE CON ANALISI */}
-        {budgetTrackerOpen && (() => {
-          const stats = calcolaBudgetStats();
-          const analisi = calcolaAnalisiReparto();
-          const suggerimenti = getSuggerimentiAcquisto();
-          
-          return (
-            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl shadow-xl p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-lg">💰 Budget Tracker</p>
-                    <button 
-                      onClick={() => setBudgetTrackerOpen(false)}
-                      className="text-xs bg-white bg-opacity-20 hover:bg-opacity-30 px-2 py-1 rounded transition"
-                    >
-                      ✕ Chiudi
-                    </button>
-                  </div>
-                  <p className="text-sm opacity-90 mt-1">
-                    Giocatori: {stats.giocatoriAcquistati}/25 | 
-                    Spesa totale: ~{Math.round(stats.spesaReale)} crediti
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-black">{Math.round(stats.budgetMedio)}</p>
-                  <p className="text-xs opacity-90">cr/giocatore medio</p>
-                </div>
-              </div>
-              
-              <div className="text-xs bg-white bg-opacity-20 rounded px-3 py-2 mb-3">
-                📊 Budget rimanente: ~{Math.round(stats.budgetRimanente)} crediti per {stats.giocatoriMancanti} giocatori
-              </div>
+{budgetTrackerOpen && (() => {
+  const stats = calcolaBudgetStats();
+  const analisi = calcolaAnalisiReparto();
+  
+  return (
+    <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl shadow-xl p-4">
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-lg">💰 Budget Tracker</p>
+            <button 
+              onClick={() => setBudgetTrackerOpen(false)}
+              className="text-xs bg-white bg-opacity-20 hover:bg-opacity-30 px-2 py-1 rounded transition"
+            >
+              ✕ Chiudi
+            </button>
+          </div>
+          <p className="text-sm opacity-90 mt-1">
+            Giocatori: {stats.giocatoriAcquistati}/25 | 
+            Spesa totale: ~{Math.round(stats.spesaReale)} crediti
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-2xl font-black">{Math.round(stats.budgetMedio)}</p>
+          <p className="text-xs opacity-90">cr/giocatore medio</p>
+        </div>
+      </div>
+      
+      <div className="text-xs bg-white bg-opacity-20 rounded px-3 py-2 mb-3">
+        📊 Budget rimanente: ~{Math.round(stats.budgetRimanente)} crediti per {stats.giocatoriMancanti} giocatori
+      </div>
 
-              {/* ANALISI REPARTO */}
-              {titolari.length + panchina.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-lg p-3 mb-3">
-                  <p className="text-sm font-bold mb-2">📊 Analisi per Reparto</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-white bg-opacity-30 rounded p-2">
-                      <p className="text-xs opacity-90">🛡️ DIFESA</p>
-                      <p className="text-lg font-black">{analisi.difesa.count}</p>
-                      <p className="text-xs opacity-80">~{Math.round(analisi.difesa.spesa)} cr</p>
-                    </div>
-                    <div className="bg-white bg-opacity-30 rounded p-2">
-                      <p className="text-xs opacity-90">⚙️ CENTROCAMPO</p>
-                      <p className="text-lg font-black">{analisi.centro.count}</p>
-                      <p className="text-xs opacity-80">~{Math.round(analisi.centro.spesa)} cr</p>
-                    </div>
-                    <div className="bg-white bg-opacity-30 rounded p-2">
-                      <p className="text-xs opacity-90">⚡ ATTACCO</p>
-                      <p className="text-lg font-black">{analisi.attacco.count}</p>
-                      <p className="text-xs opacity-80">~{Math.round(analisi.attacco.spesa)} cr</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-        })()}
+      {titolari.length + panchina.length > 0 && (
+        <div className="bg-white bg-opacity-20 rounded-lg p-3">
+          <p className="text-sm font-bold mb-2">📊 Analisi per Reparto</p>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="bg-white bg-opacity-30 rounded p-2">
+              <p className="text-xs opacity-90">🛡️ DIFESA</p>
+              <p className="text-lg font-black">{analisi.difesa.count}</p>
+              <p className="text-xs opacity-80">~{Math.round(analisi.difesa.spesa)} cr</p>
+            </div>
+            <div className="bg-white bg-opacity-30 rounded p-2">
+              <p className="text-xs opacity-90">⚙️ CENTROCAMPO</p>
+              <p className="text-lg font-black">{analisi.centro.count}</p>
+              <p className="text-xs opacity-80">~{Math.round(analisi.centro.spesa)} cr</p>
+            </div>
+            <div className="bg-white bg-opacity-30 rounded p-2">
+              <p className="text-xs opacity-90">⚡ ATTACCO</p>
+              <p className="text-lg font-black">{analisi.attacco.count}</p>
+              <p className="text-xs opacity-80">~{Math.round(analisi.attacco.spesa)} cr</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+})()}
         
         {/* PULSANTE APRI BUDGET TRACKER */}
         {!budgetTrackerOpen && (
